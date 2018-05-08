@@ -6,20 +6,31 @@ using System.Threading.Tasks;
 
 namespace UmlRelationshipExample
 {
-    class Aggregation
+    public class Aggregation
     {
-    }
+        // In an aggregation Foo always has a Bar.
+        // Ownership of Bar however lies outside Foo.
+        // Also, Foo can listens to Bar (not in this example, Disposing Bar is not responsibility of Foo, unsubscribing is responsibility of Foo).
+        // Foo has a Bar
 
-    class Foo3
-    {
-        private readonly Bar3 bar;
-
-        Foo3(Bar3 bar)
+        public class Foo3
         {
-            this.bar = bar;
+            private readonly Bar3 LocalBar;
+
+            public Foo3(Bar3 bar)
+            {
+                this.LocalBar = bar ?? throw new ArgumentNullException();
+            }
+
+            public void DoSomething()
+            {
+                Console.WriteLine($"{nameof(Foo3)} can always access info from {nameof(Bar3)}. {this.LocalBar.SomeInformation}");
+            }
         }
-    }
-    class Bar3
-    {
+
+        public class Bar3
+        {
+            public string SomeInformation { get; } = $"This is some information from {nameof(Bar3)}";
+        }
     }
 }
